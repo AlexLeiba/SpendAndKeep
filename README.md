@@ -41,3 +41,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 6 - 24x
 12 - 48px
 24 - 96px
+
+## BG colors
+
+light: gray-300
+dark: gray-800
