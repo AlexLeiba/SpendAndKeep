@@ -1,5 +1,4 @@
 import { Navbar } from '@/components/Navbar';
-import { Spacer } from '@/components/ui/spacer';
 
 export default function RootLayout({
   children,
@@ -9,7 +8,6 @@ export default function RootLayout({
   return (
     <div className=''>
       <Navbar />
-      <Spacer size={12} md={6} sm={6} />
       <div className='w-full max-w-5xl mx-auto h-screen'>{children}</div>
     </div>
   );

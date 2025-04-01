@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// to push the prisma schema into db use command: npx prisma db push
+// to add types and functions locally to the prisma schema use command: npx prisma generate
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  
+  
+}
+
+model UserSettings {
+  userId String @id 
+  currency String @default("USD")
+}
+
+model Category {
+  createdAt DateTime @default(now())
+  userId String @id 
+  name String
+  icon String
+  type String @default("income")
+
+  @@unique([userId, name,type]) 
+}
+
+model Transaction {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  amount Float
+  description String
+  date DateTime
+  userId String 
+  type String @default("income")
+  category String
+  categoryIcon String
+
+
+}
+
+model MonthHistory {
+  userId String 
+  day Int
+  month Int
+  year Int
+  income Float
+  expense Float
+
+  @@id([userId, day, month, year])  //multifield id composed of userId, day, month, year -> prevent duplicate history entries
+}
+model YearHistory {
+  userId String 
+  month Int
+  year Int
+  income Float
+  expense Float
+
+  @@id([userId,month, year]) 
+}

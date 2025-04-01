@@ -44,5 +44,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## BG colors
 
-light: gray-300
-dark: gray-800
+light background: gray-300
+dark background: gray-800
+
+## Text colors
+
+primary text color: white
+secondary text color: gray-300
+
+## Max width 1024px
+
+max-width: max-w-5xl -- 1024px
