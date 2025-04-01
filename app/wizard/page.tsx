@@ -50,7 +50,6 @@ export default async function Home() {
           </CardHeader>
 
           <CardContent>
-            {' '}
             <CurrencyComboBox />
           </CardContent>
         </Card>
