@@ -31,49 +31,50 @@ export function Navbar() {
   return (
     <>
       {/* Desktop Navbar */}
+      <div className='hidden border-separate border-b md:block fixed top-0 right-0 left-0 z-50  dark:bg-gray-950 bg-gray-300'>
+        <div className=' max-w-5xl mx-auto  '>
+          <nav className='glex items-center justify-between px-8'>
+            <div className='flex h-[65px] min-h-[60px] items-center gap-x-8'>
+              <Logo />
 
-      <div className='hidden border-separate border-b  dark:bg-background md:block max-w-5xl mx-auto '>
-        <nav className='glex items-center justify-between px-8'>
-          <div className='flex h-[65px] min-h-[60px] items-center gap-x-8'>
-            <Logo />
-
-            {/* links */}
-            {pathname !== '/wizard' ? (
-              <div className='flex w-full gap-4 items-center'>
-                {linkItems.map((data, index) => {
-                  const isActive = pathname === data.href.toLowerCase();
-                  return (
-                    <Link
-                      key={index}
-                      href={data.href}
-                      className={cn(
-                        isActive
-                          ? 'font-bold dark:text-white text-black '
-                          : 'font-medium',
-                        'relative hover:bg-gray-200  transition-all p-2 rounded-md  text-gray-700 dark:hover:text-black dark:text-gray-100 '
-                      )}
-                    >
-                      <p className={cn()}>{data.label}</p>
-                      <div
+              {/* links */}
+              {pathname !== '/wizard' ? (
+                <div className='flex w-full gap-4 items-center'>
+                  {linkItems.map((data, index) => {
+                    const isActive = pathname === data.href.toLowerCase();
+                    return (
+                      <Link
+                        key={index}
+                        href={data.href}
                         className={cn(
-                          isActive &&
-                            'border-b-1 dark:border-white border-black absolute top-[52px] left-1/2 -translate-1/2 bottom-0  w-[120%] z-10'
+                          isActive
+                            ? 'font-bold dark:text-white text-black '
+                            : 'font-medium',
+                          'relative hover:bg-gray-200  transition-all p-2 rounded-md  text-gray-700 dark:hover:text-black dark:text-gray-100 '
                         )}
-                      ></div>
-                    </Link>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className='w-full'></div>
-            )}
+                      >
+                        <p className={cn()}>{data.label}</p>
+                        <div
+                          className={cn(
+                            isActive &&
+                              'border-b-1 dark:border-white border-black absolute top-[52px] left-1/2 -translate-1/2 bottom-0  w-[120%] z-10'
+                          )}
+                        ></div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className='w-full'></div>
+              )}
 
-            <div className='flex items-center gap-4'>
-              <ThemeToggle />
-              <UserButton />
+              <div className='flex items-center gap-4'>
+                <ThemeToggle />
+                <UserButton />
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        </div>
       </div>
 
       {/* Mobile Navbar */}

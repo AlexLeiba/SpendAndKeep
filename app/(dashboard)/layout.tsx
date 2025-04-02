@@ -9,8 +9,10 @@ export default function RootLayout({
   return (
     <div className=''>
       <Navbar />
-      <Spacer size={12} md={6} sm={6} />
-      <div className='w-full max-w-5xl mx-auto h-screen'>{children}</div>
+
+      <div className='px-8 max-w-5xl mx-auto h-screen mt-[65px]'>
+        {children}
+      </div>
     </div>
   );
 }

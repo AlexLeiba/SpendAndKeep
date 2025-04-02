@@ -1,10 +1,45 @@
-import { SignOutButton, UserButton } from '@clerk/nextjs';
+import {
+  HelloTopSection,
+  OverviewSection,
+  HistorySection,
+} from '@/components/PageSections/Dashboard';
+import { Spacer } from '@/components/ui/spacer';
+import { prismaDB } from '@/lib/prisma';
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
-function DashboardPage() {
+async function DashboardPage() {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect('/sign-in');
+  }
+  console.log('🚀 ~ DashboardPage ~ user:', user);
+
+  const userSettings = await prismaDB.userSettings.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!userSettings) {
+    redirect('/wizard');
+  }
+
   return (
     <div>
-      <h1>Dashboard</h1>
+      {/* HELLO SECTION*/}
+      <HelloTopSection />
+      <Spacer lg={12} md={6} sm={6} />
+
+      {/* OVERVIEW SECTION */}
+      <OverviewSection />
+      <Spacer lg={12} md={6} sm={6} />
+
+      {/* HISTORY SECTION */}
+      <HistorySection />
+      <Spacer lg={12} md={6} sm={6} />
     </div>
   );
 }
