@@ -3,7 +3,6 @@ import { TransactionDialog } from '@/components/TransactionDialog';
 import { Button } from '@/components/ui/button';
 import { Spacer } from '@/components/ui/spacer';
 import { useUser } from '@clerk/nextjs';
-import { User } from '@clerk/nextjs/server';
 import React from 'react';
 
 export function HelloTopSection() {
