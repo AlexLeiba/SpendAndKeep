@@ -48,7 +48,7 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
       <DialogTrigger asChild={true}>{triggerChildren}</DialogTrigger>
 
       <DialogContent>
-        <DialogHeader className='mb-3'>
+        <DialogHeader>
           <DialogTitle>
             Create a new{' '}
             <span
@@ -64,6 +64,7 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
             </span>
             transaction
           </DialogTitle>
+          <Spacer size={3} />
         </DialogHeader>
 
         {/* //Form === FormProvider */}
