@@ -18,7 +18,7 @@ export default async function Home() {
   const user = await currentUser();
 
   if (!user) {
-    redirect('/sign-next');
+    redirect('/sign-in');
   }
 
   return (
@@ -49,6 +49,7 @@ export default async function Home() {
           </CardHeader>
 
           <CardContent>
+            {/* CURRENCY SELECT (DROPDOWN) */}
             <CurrencyComboBox />
           </CardContent>
         </Card>

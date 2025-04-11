@@ -5,9 +5,9 @@ import { redirect } from 'next/navigation';
 export default async function Home() {
   const user = await currentUser();
 
-  if (!user) {
-    redirect('/sign-next');
-  }
+  // if (!user) {
+  //   redirect('/sign-up');
+  // }
 
   return (
     <div className=' min-h-screen '>

@@ -15,7 +15,7 @@ async function DashboardPage() {
   if (!user) {
     redirect('/sign-in');
   }
-  console.log('🚀 ~ DashboardPage ~ user:', user);
+  console.log('🚀 ~ DashboardPage ~ user:\n\n\n', user);
 
   const userSettings = await prismaDB.userSettings.findUnique({
     where: {

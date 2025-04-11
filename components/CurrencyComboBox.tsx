@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -22,12 +22,14 @@ import { Currencies, type CurrencyType } from '@/lib/currencies';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { SkeletonWrapper } from './Skeletons/SkeletonWrapper';
 import { UserSettings } from '@prisma/client';
-import { UpdateUserCurrency } from '@/app/actions/wizard-actions';
+import { UpdateUserCurrency } from '@/app/server-actions/wizard-actions';
 import { toast } from 'sonner';
 
 export function CurrencyComboBox() {
   const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  const isDesktop = useMediaQuery('(min-width: 768px)'); //checks if matches if the given argument query size.+
+
   const [selectedCurrency, setSelectedCurrency] =
     React.useState<CurrencyType | null>(null);
 
@@ -41,7 +43,7 @@ export function CurrencyComboBox() {
       setSelectedCurrency(null);
     }
     const userCurrency = Currencies.find(
-      (currency) => currency.id === userSettings?.currency
+      (currencyData) => currencyData.currency === userSettings?.currency
     );
 
     if (userCurrency) {
@@ -75,7 +77,7 @@ export function CurrencyComboBox() {
           id: 'saving-currency',
         });
         setSelectedCurrency(currency);
-        mutationObj.mutate(currency.id);
+        mutationObj.mutate(currency.currency);
       }
       setOpen(false);
     },
@@ -160,7 +162,7 @@ function StatusList({
         <CommandGroup>
           {Currencies.map((currencyData) => (
             <CommandItem
-              key={currencyData.id}
+              key={currencyData.currency}
               value={currencyData.name}
               onSelect={(value) => {
                 setSelectedCurrency(
