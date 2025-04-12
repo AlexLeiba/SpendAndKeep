@@ -1,26 +1,42 @@
 'use client';
-import { CreateCategorySchema } from '@/consts/schema';
+import {
+  CreateCategorySchema,
+  CreateCategorySchemaType,
+} from '@/consts/schema';
 import { TransactionType } from '@/consts/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { Form, useForm } from 'react-hook-form';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
 import { Button } from './ui/button';
-import { CircleOff, PlusSquare } from 'lucide-react';
-import { FormDescription, FormField, FormItem, FormLabel } from './ui/form';
+import { CircleOff, Loader, PlusSquare } from 'lucide-react';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from './ui/form';
 import { Input } from './ui/input';
 import { Spacer } from './ui/spacer';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import EmojiPicker from '@emoji-mart/react';
 import EmojiData from '@emoji-mart/data';
+import { createCategory } from '@/app/server-actions/dashboard-actions';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { set } from 'date-fns';
+import { Category } from '@prisma/client';
 
 export function CreateCategoryDialog({ type }: { type: TransactionType }) {
   const [open, setOpen] = React.useState(false);
@@ -32,6 +48,48 @@ export function CreateCategoryDialog({ type }: { type: TransactionType }) {
       type: type,
     },
   });
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = formMethods;
+
+  //QUERY MUTATION
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createCategory,
+    onSuccess: async (data: Category) => {
+      toast.success(`Category ${data.name} created successfully 🎉`, {
+        id: 'create-category',
+      });
+      reset();
+      setOpen(false);
+
+      // to refetch the categories query
+      await queryClient.invalidateQueries({
+        queryKey: ['categories'],
+      });
+    },
+    onError: () => {
+      toast.error('Something went wrong 🥺, please try again', {
+        id: 'create-category',
+      });
+    },
+  });
+
+  const handleAddNewIncomeCategory = React.useCallback(
+    async (formData: CreateCategorySchemaType) => {
+      toast.loading('Creating new category...', {
+        id: 'create-category',
+      });
+
+      mutate(formData);
+    },
+    [mutate]
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -66,79 +124,102 @@ export function CreateCategoryDialog({ type }: { type: TransactionType }) {
         </DialogHeader>
 
         {/* FORM */}
-        <Form {...formMethods}>
-          <form onChange={(e) => e.preventDefault()}>
-            <FormField //FormField === Controller
-              control={formMethods.control}
-              name='name'
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    {/* p  */}
-                    <FormLabel>Name</FormLabel>
+        <Form>
+          <FormField //FormField === Controller
+            control={formMethods.control}
+            name='name'
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
 
-                    {/* <FormControl> */}
-                    <Input {...field} placeholder='category name' />
-                    {/* </FormControl> */}
+                  <Input {...field} placeholder='category name' />
+                  <p className='text-xs text-red-500'>{errors.name?.message}</p>
 
-                    <FormDescription>Your category name</FormDescription>
-                  </FormItem>
-                );
-              }}
-            />
+                  <FormDescription>Your category name</FormDescription>
+                </FormItem>
+              );
+            }}
+          />
 
-            <Spacer size={6} />
-            <FormField //FormField === Controller
-              control={formMethods.control}
-              name='icon'
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    {/* p  */}
-                    <FormLabel>Icon</FormLabel>
+          <Spacer size={6} />
+          <FormField //FormField === Controller
+            control={formMethods.control}
+            name='icon'
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Icon</FormLabel>
 
-                    {/* <FormControl> */}
-                    {/* <Input {...field} placeholder='category name' /> */}
-                    <Popover>
-                      <PopoverTrigger asChild className='h-[100px]'>
-                        <Button
-                          variant='outline'
-                          className='w-[200px] flex justify-center cursor-pointer'
-                        >
-                          {formMethods.watch('icon') ? (
-                            <div className='flex flex-col items-center justify-center gap-2'>
-                              <p className='text-5xl' role='img'>
-                                {formMethods.watch('icon')}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className='flex flex-col items-center justify-center gap-2'>
-                              <CircleOff size={60} className='size-12' />
-                              <p>Select an icon</p>
-                            </div>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
+                  {/* CREATE NEW CATEGORY DIALOG (MODAL) */}
+                  <Popover>
+                    {/* TRIGGER */}
+                    <PopoverTrigger asChild className='h-[100px]'>
+                      <Button
+                        variant='outline'
+                        className='w-[200px] flex justify-center cursor-pointer'
+                      >
+                        {formMethods.watch('icon') ? (
+                          <div className='flex flex-col items-center justify-center gap-2'>
+                            <p className='text-5xl' role='img'>
+                              {formMethods.watch('icon')}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className='flex flex-col items-center justify-center gap-2'>
+                            <CircleOff size={60} className='size-12' />
+                            <p>Select an icon</p>
+                          </div>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
 
-                      <PopoverContent className='w-[200px] p-0'>
-                        <EmojiPicker
-                          data={EmojiData}
-                          onEmojiSelect={(emoji: any) => {
-                            formMethods.setValue('icon', emoji.native);
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {/* </FormControl> */}
-
+                    {/* CONTENT */}
+                    <PopoverContent className='w-[200px] p-0'>
+                      <EmojiPicker
+                        data={EmojiData}
+                        onEmojiSelect={(emoji: any) => {
+                          formMethods.setValue('icon', emoji.native);
+                        }}
+                      />
+                    </PopoverContent>
+                    <p className='text-xs text-red-500'>
+                      {errors.icon?.message}
+                    </p>
                     <FormDescription>
                       This is how your category will appear in the app
                     </FormDescription>
-                  </FormItem>
-                );
-              }}
-            />
-          </form>
+
+                    {/* FOOTER */}
+                    <Spacer size={6} />
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <div className='flex gap-2'>
+                          <Button type='button' variant='secondary'>
+                            Cancel
+                          </Button>
+                          <Button
+                            disabled={isPending}
+                            onClick={handleSubmit(handleAddNewIncomeCategory)}
+                          >
+                            {isPending ? (
+                              <div className='flex gap-2'>
+                                <span className='animate-spin'>
+                                  <Loader />
+                                </span>
+                              </div>
+                            ) : (
+                              'Create'
+                            )}
+                          </Button>
+                        </div>
+                      </DialogClose>
+                    </DialogFooter>
+                  </Popover>
+                </FormItem>
+              );
+            }}
+          />
         </Form>
       </DialogContent>
     </Dialog>

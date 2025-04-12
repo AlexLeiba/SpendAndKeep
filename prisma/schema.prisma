@@ -27,13 +27,14 @@ model UserSettings {
 }
 
 model Category {
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  userId String @id 
-  name String
-  icon String
-  type String @default("income")
+  userId    String
+  name      String
+  icon      String
+  type      String   @default("income")
 
-  @@unique([userId, name,type]) 
+  @@unique([userId, name])
 }
 
 model Transaction {

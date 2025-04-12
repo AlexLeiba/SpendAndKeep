@@ -29,8 +29,8 @@ export type CreateTransactionSchemaType = z.infer<
 >;
 
 export const CreateCategorySchema = z.object({
-  name: z.string().min(3).max(20),
-  icon: z.string().min(3).max(20),
+  name: z.string().min(3, 'Name is required').max(20, 'Name is too long'),
+  icon: z.string().min(1, 'Icon is required'),
   type: z.enum(['income', 'expense']),
 });
 

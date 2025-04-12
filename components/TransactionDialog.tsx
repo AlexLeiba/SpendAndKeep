@@ -17,7 +17,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
-  FormControl,
   FormDescription,
   FormField,
   FormItem,
@@ -112,6 +111,7 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
               }}
             />
             <Spacer size={6} />
+            {/* CATEGORY */}
             <FormField
               control={formMethods.control}
               name='category'
