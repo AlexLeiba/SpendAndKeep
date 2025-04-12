@@ -3,6 +3,8 @@
 import {
   CreateCategorySchema,
   CreateCategorySchemaType,
+  CreateTransactionSchema,
+  CreateTransactionSchemaType,
 } from '@/consts/schema';
 import { prismaDB } from '@/lib/prisma';
 import { currentUser } from '@clerk/nextjs/server';
@@ -30,6 +32,37 @@ export async function createCategory(categoryData: CreateCategorySchemaType) {
       name: name,
       icon: icon,
       type: type,
+    },
+  });
+}
+
+export async function createTransaction(
+  transactionData: CreateTransactionSchemaType
+) {
+  const parsedBody = CreateTransactionSchema.safeParse(transactionData);
+
+  if (!parsedBody.success) {
+    throw new Error(parsedBody.error.message);
+  }
+
+  const user = await currentUser();
+
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const { amount, category, description, type, categoryIcon, date } =
+    parsedBody.data;
+
+  return await prismaDB.transaction.create({
+    data: {
+      userId: user.id,
+      description: description ?? '',
+      amount: amount,
+      category: category,
+      type: type,
+      date: date ? date : new Date(), // Add a default date or use a value from transactionData if available
+      categoryIcon: categoryIcon ?? '',
     },
   });
 }

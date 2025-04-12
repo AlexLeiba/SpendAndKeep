@@ -19,9 +19,10 @@ export type UserSettingsSchemaType = z.infer<typeof UserSettingsSchema>;
 export const CreateTransactionSchema = z.object({
   description: z.string().optional(),
   amount: z.coerce.number().positive(), //even if we will pass a string to this key it will parse as a number
-  category: z.string(),
-  date: z.coerce.date(),
+  category: z.string().min(1, 'Category is required'),
+  date: z.coerce.date().optional(),
   type: z.union([z.literal('expense'), z.literal('income')]),
+  categoryIcon: z.string().optional(),
 });
 
 export type CreateTransactionSchemaType = z.infer<

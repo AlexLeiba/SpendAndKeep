@@ -1,8 +1,8 @@
 'use client';
+import React from 'react';
 import { TransactionType } from '@/consts/types';
 import { Category } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Button } from './ui/button';
 import {
@@ -15,11 +15,13 @@ import {
 import { CreateCategoryDialog } from './CreateCategoryDialog';
 import { CommandEmpty } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 
 type Props = {
   type: TransactionType;
 };
 function CategoryPicker({ type }: Props) {
+  const { setValue } = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [selectedCat, setSelectedCat] = React.useState<string>('');
 
@@ -31,16 +33,19 @@ function CategoryPicker({ type }: Props) {
     },
   });
 
-  function handleSelectOption(value: string) {
-    setSelectedCat(value);
+  const handleSelectOption = React.useCallback((value: Category) => {
+    setSelectedCat(value.name);
     setOpen(false);
-  }
+
+    const categoryData = value.name;
+    setValue('category', categoryData);
+    setValue('categoryIcon', value.icon);
+  }, []);
 
   const selectedCategory = categoriesQuery.data?.find(
     (category: Category) => category.name === selectedCat
   );
 
-  // const selectedCategory
   return (
     <Popover open={open} onOpenChange={setOpen}>
       {/* TRIGGER */}
@@ -74,7 +79,7 @@ function CategoryPicker({ type }: Props) {
                       key={index}
                       value={category.name}
                       onSelect={(value) => {
-                        handleSelectOption(value);
+                        handleSelectOption(category);
                       }}
                     >
                       <CategoryRow
@@ -91,7 +96,10 @@ function CategoryPicker({ type }: Props) {
           </CommandGroup>
 
           {/* CREATE NEW CATEGORY DIALOG (MODAL) */}
-          <CreateCategoryDialog type={type} />
+          <CreateCategoryDialog
+            type={type}
+            handleSuccessCreatedCategory={handleSelectOption}
+          />
         </Command>
       </PopoverContent>
     </Popover>

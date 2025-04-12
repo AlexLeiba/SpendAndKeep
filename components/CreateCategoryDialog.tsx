@@ -1,11 +1,11 @@
 'use client';
+import React from 'react';
 import {
   CreateCategorySchema,
   CreateCategorySchemaType,
 } from '@/consts/schema';
 import { TransactionType } from '@/consts/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
 import { Form, useForm } from 'react-hook-form';
 import {
   Dialog,
@@ -19,13 +19,7 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import { CircleOff, Loader, PlusSquare } from 'lucide-react';
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from './ui/form';
+import { FormDescription, FormField, FormItem, FormLabel } from './ui/form';
 import { Input } from './ui/input';
 import { Spacer } from './ui/spacer';
 import { cn } from '@/lib/utils';
@@ -35,10 +29,15 @@ import EmojiData from '@emoji-mart/data';
 import { createCategory } from '@/app/server-actions/dashboard-actions';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { set } from 'date-fns';
 import { Category } from '@prisma/client';
 
-export function CreateCategoryDialog({ type }: { type: TransactionType }) {
+export function CreateCategoryDialog({
+  type,
+  handleSuccessCreatedCategory,
+}: {
+  type: TransactionType;
+  handleSuccessCreatedCategory: (category: Category) => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const formMethods = useForm({
     resolver: zodResolver(CreateCategorySchema),
@@ -64,6 +63,7 @@ export function CreateCategoryDialog({ type }: { type: TransactionType }) {
       toast.success(`Category ${data.name} created successfully 🎉`, {
         id: 'create-category',
       });
+      handleSuccessCreatedCategory(data);
       reset();
       setOpen(false);
 
