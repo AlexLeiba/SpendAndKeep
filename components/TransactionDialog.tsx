@@ -27,7 +27,7 @@ import {
 import { Input } from './ui/input';
 import { Spacer } from './ui/spacer';
 import CategoryPicker from './CategoryPicker';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTransaction } from '@/app/server-actions/dashboard-actions';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
@@ -60,7 +60,10 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
   const {
     handleSubmit,
     formState: { errors },
+    reset,
   } = formMethods;
+
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: createTransaction,
@@ -69,7 +72,9 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
         id: 'create-transaction',
       });
 
+      reset();
       setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['overview-transactions'] }); // refetch transactions overview on Dashboard page
     },
     onError: () => {
       toast.error('Something went wrong 🥺, please try again', {
