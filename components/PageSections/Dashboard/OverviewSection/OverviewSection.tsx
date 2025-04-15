@@ -15,8 +15,8 @@ export function OverviewSection({
   userSettings: UserSettings;
 }) {
   const [dateRange, setDateRange] = React.useState<{
-    from: Date | undefined;
-    to: Date | undefined;
+    from: Date;
+    to: Date;
   }>({
     from: startOfMonth(new Date()),
     to: new Date(),
@@ -57,7 +57,11 @@ export function OverviewSection({
 
       <Spacer size={6} />
 
-      <TransactionsBalance currency={userSettings?.currency} />
+      <TransactionsBalance
+        currency={userSettings?.currency}
+        from={dateRange.from}
+        to={dateRange.to}
+      />
     </div>
   );
 }

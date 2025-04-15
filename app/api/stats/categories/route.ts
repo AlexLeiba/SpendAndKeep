@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation';
 
 export async function GET(request: Request) {
   const user = await currentUser();
-
   if (!user) {
     redirect('/sign-in');
   }
@@ -14,13 +13,16 @@ export async function GET(request: Request) {
   const from = searchParams.get('from');
   const to = searchParams.get('to');
 
-  const queryParams = OverviewQuerySchema.safeParse({ from, to });
+  const queryParams = OverviewQuerySchema.safeParse({
+    from,
+    to,
+  });
 
   if (!queryParams.success) {
     throw new Error(queryParams.error.message);
   }
 
-  const stats = await getBalanceStats(
+  const stats = await getCategoriesStats(
     user.id,
     queryParams.data.from,
     queryParams.data.to
@@ -29,22 +31,16 @@ export async function GET(request: Request) {
   return Response.json(stats);
 }
 
-export type GetBalanceStatsResponseType = Awaited<
-  ReturnType<typeof getBalanceStats>
+export type GetCategoriesStatsType = Awaited<
+  ReturnType<typeof getCategoriesStats>
 >;
 
-async function getBalanceStats(
-  userId: string,
-  from: Date,
-  to: Date
-  // type: string | null
-) {
-  const totals = await prismaDB.transaction.groupBy({
-    by: ['type'], //group by (type) presented in (prisma.schema) under the model (transaction)
+async function getCategoriesStats(userId: string, from: Date, to: Date) {
+  const stats = await prismaDB.transaction.groupBy({
+    by: ['type', 'category', 'categoryIcon'], //group by (type, category, categoryIcon) presented in (prisma.schema) under the model (transaction)
     where: {
       userId: userId, //filter by userId
       date: {
-        //filter by date on request
         gte: from, //greater than or equal to
         lte: to, //less than or equal to
       },
@@ -52,10 +48,12 @@ async function getBalanceStats(
     _sum: {
       amount: true,
     },
+    orderBy: {
+      _sum: {
+        amount: 'desc',
+      },
+    },
   });
 
-  return {
-    expense: totals.find((data) => data.type === 'expense')?._sum?.amount || 0,
-    income: totals.find((data) => data.type === 'income')?._sum?.amount || 0,
-  };
+  return stats;
 }

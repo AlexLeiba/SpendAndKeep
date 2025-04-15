@@ -26,7 +26,7 @@ export function HelloTopSection() {
           <TransactionDialog
             transactionType='income'
             triggerChildren={
-              <Button className='cursor-pointer bg-green-900 hover:bg-green-950 text-white'>
+              <Button className='cursor-pointer dark:bg-green-900 bg-green-300 hover:bg-green-200 dark:hover:bg-green-800 dark:text-white text-black'>
                 New income 🤑
               </Button>
             }
@@ -35,7 +35,7 @@ export function HelloTopSection() {
           <TransactionDialog
             transactionType='expense'
             triggerChildren={
-              <Button className='cursor-pointer bg-red-900 hover:bg-red-950 text-white'>
+              <Button className='cursor-pointer dark:bg-red-900 bg-red-300 hover:bg-red-200 dark:hover:bg-red-800 dark:text-white text-black'>
                 New expense 😠
               </Button>
             }

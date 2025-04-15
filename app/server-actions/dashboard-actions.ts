@@ -131,16 +131,4 @@ export async function createTransaction(
     }),
     // update aggregates table
   ]);
-
-  // return await prismaDB.transaction.create({
-  //   data: {
-  //     userId: user.id,
-  //     description: description ?? '',
-  //     amount: amount,
-  //     category: category,
-  //     type: type,
-  //     date: date ? date : new Date(), // Add a default date or use a value from transactionData if available
-  //     categoryIcon: categoryIcon ?? '',
-  //   },
-  // });
 }

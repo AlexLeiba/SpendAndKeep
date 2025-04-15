@@ -1,4 +1,6 @@
+import { MAX_DATE_RANGE_DAYS } from '@/lib/consts';
 import { Currencies } from '@/lib/currencies';
+import { differenceInDays } from 'date-fns';
 import { z } from 'zod';
 
 export const UserSettingsSchema = z.object({
@@ -36,3 +38,20 @@ export const CreateCategorySchema = z.object({
 });
 
 export type CreateCategorySchemaType = z.infer<typeof CreateCategorySchema>;
+
+export const OverviewQuerySchema = z
+  .object({
+    from: z.coerce.date(),
+    to: z.coerce.date(),
+  })
+  .refine((data) => {
+    const { from, to } = data;
+
+    // Check difference between from and to
+    const days = differenceInDays(to, from);
+    const isValidDateRange = days > 0 && days <= MAX_DATE_RANGE_DAYS;
+
+    return isValidDateRange;
+  });
+
+export type OverviewQuerySchemaType = z.infer<typeof OverviewQuerySchema>;
