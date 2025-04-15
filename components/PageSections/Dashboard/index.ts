@@ -1,3 +1,3 @@
-export * from './HelloTopSection';
-export * from './HistorySection';
-export * from './OverviewSection';
+export * from './HelloTopSection/HelloTopSection';
+export * from './HistorySection/HistorySection';
+export * from './OverviewSection/OverviewSection';

@@ -3,15 +3,15 @@ import React from 'react';
 import { TransactionType } from '@/consts/types';
 import { Category } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Button } from './ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
+import { Button } from '../../../ui/button';
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from './ui/command';
+} from '../../../ui/command';
 import { CreateCategoryDialog } from './CreateCategoryDialog';
 import { CommandEmpty } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';

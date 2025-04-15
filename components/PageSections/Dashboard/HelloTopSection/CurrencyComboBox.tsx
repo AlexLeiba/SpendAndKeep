@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/popover';
 import { Currencies, type CurrencyType } from '@/lib/currencies';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { SkeletonWrapper } from './Skeletons/SkeletonWrapper';
+import { SkeletonWrapper } from '../../../Skeletons/SkeletonWrapper';
 import { UserSettings } from '@prisma/client';
 import { UpdateUserCurrency } from '@/app/server-actions/wizard-actions';
 import { toast } from 'sonner';

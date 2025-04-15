@@ -60,6 +60,7 @@ export async function createTransaction(
 
   await prismaDB.$transaction([
     prismaDB.transaction.create({
+      //create transaction
       data: {
         userId: user.id,
         description: description ?? '',
@@ -72,6 +73,7 @@ export async function createTransaction(
     }),
 
     prismaDB.monthHistory.upsert({
+      //Create or update one Prisma model (upsert)
       where: {
         //in Prisma schema (userId_day_month_year) this is the structure which creates the ID in this format
         userId_day_month_year: {
@@ -91,6 +93,7 @@ export async function createTransaction(
         income: type === 'income' ? amount : 0,
       },
       update: {
+        //if Already exists with this ID then Update  (expense value or Income)
         expense: {
           increment: type === 'expense' ? amount : 0,
         },

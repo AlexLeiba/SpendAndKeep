@@ -34,7 +34,7 @@ async function DashboardPage() {
       <Spacer lg={12} md={6} sm={6} />
 
       {/* OVERVIEW SECTION */}
-      <OverviewSection />
+      <OverviewSection userSettings={userSettings} />
       <Spacer lg={12} md={6} sm={6} />
 
       {/* HISTORY SECTION */}

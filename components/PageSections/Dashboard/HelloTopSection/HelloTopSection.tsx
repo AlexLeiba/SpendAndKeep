@@ -1,9 +1,10 @@
 'use client';
-import { TransactionDialog } from '@/components/TransactionDialog';
+
+import React from 'react';
+import { TransactionDialog } from './TransactionDialog';
 import { Button } from '@/components/ui/button';
 import { Spacer } from '@/components/ui/spacer';
 import { useUser } from '@clerk/nextjs';
-import React from 'react';
 
 export function HelloTopSection() {
   const { user } = useUser();

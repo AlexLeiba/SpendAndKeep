@@ -16,14 +16,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
-import { Button } from './ui/button';
+} from '../../../ui/dialog';
+import { Button } from '../../../ui/button';
 import { CircleOff, Loader, PlusSquare } from 'lucide-react';
-import { FormDescription, FormField, FormItem, FormLabel } from './ui/form';
-import { Input } from './ui/input';
-import { Spacer } from './ui/spacer';
+import {
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '../../../ui/form';
+import { Input } from '../../../ui/input';
+import { Spacer } from '../../../ui/spacer';
 import { cn } from '@/lib/utils';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
 import EmojiPicker from '@emoji-mart/react';
 import EmojiData from '@emoji-mart/data';
 import { createCategory } from '@/app/server-actions/dashboard-actions';

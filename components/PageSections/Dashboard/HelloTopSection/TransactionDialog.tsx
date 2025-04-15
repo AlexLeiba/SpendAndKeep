@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
+} from '../../../ui/dialog';
 import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
 import {
@@ -23,19 +23,19 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from './ui/form';
-import { Input } from './ui/input';
-import { Spacer } from './ui/spacer';
-import CategoryPicker from './CategoryPicker';
+} from '../../../ui/form';
+import { Input } from '../../../ui/input';
+import { Spacer } from '../../../ui/spacer';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTransaction } from '@/app/server-actions/dashboard-actions';
 import { toast } from 'sonner';
-import { Button } from './ui/button';
+import { Button } from '../../../ui/button';
 import { CalendarIcon, Loader } from 'lucide-react';
 import { format } from 'date-fns';
-import { Popover } from './ui/popover';
+import { Popover } from '../../../ui/popover';
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { Calendar } from './ui/calendar';
+import { Calendar } from '../../../ui/calendar';
+import CategoryPicker from './CategoryPicker';
 
 type Props = {
   transactionType: TransactionType;
