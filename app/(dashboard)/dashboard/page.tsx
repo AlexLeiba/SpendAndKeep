@@ -29,7 +29,7 @@ async function DashboardPage() {
 
   return (
     <div>
-      {/* HELLO SECTION*/}
+      {/* HELLO TOP SECTION*/}
       <HelloTopSection />
       <Spacer lg={12} md={6} sm={6} />
 
@@ -38,7 +38,7 @@ async function DashboardPage() {
       <Spacer lg={12} md={6} sm={6} />
 
       {/* HISTORY SECTION */}
-      <HistorySection />
+      <HistorySection userSettings={userSettings} />
       <Spacer lg={12} md={6} sm={6} />
     </div>
   );

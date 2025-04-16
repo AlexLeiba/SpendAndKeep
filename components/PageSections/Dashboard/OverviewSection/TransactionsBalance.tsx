@@ -19,6 +19,7 @@ export function TransactionsBalance({
   to: Date;
 }) {
   const { data: statsQueryData, isPending: isPendingBalance } =
+    // GET BALANCE
     useQuery<GetBalanceStatsResponseType>({
       queryKey: ['overview', 'stats', 'balance', from, to], //every time we receive (form,to new values) the data will be refetched
       queryFn: async () => {
@@ -28,6 +29,8 @@ export function TransactionsBalance({
         return response.json();
       },
     });
+
+  // GET CATEGORIES INCOME/EXPENSE
   const { data: categoriesQueryData, isPending: isPendingCategories } =
     useQuery<GetCategoriesStatsType>({
       queryKey: ['overview', 'stats', 'categories', from, to], //every time we receive (form,to new values) the data will be refetched
@@ -39,9 +42,7 @@ export function TransactionsBalance({
       },
     });
 
-  console.log('🚀 ~ categoriesQueryData:', categoriesQueryData);
-
-  //Used useMemo to avoid recalculation at each Render
+  //used useMemo to avoid recalculation at each Render
   const formatter = React.useMemo(() => {
     return GetFormatterForCurrency(currency);
   }, [currency]);
@@ -52,8 +53,6 @@ export function TransactionsBalance({
     },
     [formatter]
   );
-
-  console.log('🚀 ~ formatter ~ formatter:', formatFn(100));
 
   // INCOME DATA
   const incomeQueryData = statsQueryData?.income || 0;
@@ -138,54 +137,63 @@ export function TransactionsBalance({
               <h3 className='text-1xl font-bold'>Income by category</h3>
               <Spacer size={6} />
               <SkeletonWrapper isLoading={isPendingCategories} fullWidth>
-                {categoriesQueryData
-                  ?.filter((data) => data.type === 'income')
-                  .map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className='flex h-[50px] gap-2 flex-col overflow-hidden'
-                      >
-                        <div className='flex justify-between w-full '>
-                          <div className='flex gap-2 items-center'>
-                            {item.categoryIcon}
-                            <p className='text-sm'>{item.category}</p>
+                {!isPendingCategories &&
+                categoriesQueryData &&
+                categoriesQueryData?.filter((data) => data.type === 'income')
+                  .length > 0 ? (
+                  categoriesQueryData
+                    ?.filter((data) => data.type === 'income')
+                    .map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className='flex h-[50px] gap-2 flex-col overflow-hidden'
+                        >
+                          <div className='flex justify-between w-full '>
+                            <div className='flex gap-2 items-center'>
+                              {item.categoryIcon}
+                              <p className='text-sm'>{item.category}</p>
+                              {item._sum?.amount && (
+                                <>
+                                  <p className='text-xs text-gray-400'>
+                                    {Math.ceil(
+                                      (item._sum?.amount / balanceData) * 100
+                                    )}
+                                    % (of total balance)
+                                  </p>
+                                </>
+                              )}
+                            </div>
+                            <div className='flex gap-1 items-center'>
+                              {
+                                Currencies.find(
+                                  (data) => data.currency === currency
+                                )?.symbol
+                              }
+                              <p>{item._sum.amount}</p>
+                            </div>
+                          </div>
+                          {/* Progress bar */}
+                          <div className='w-full h-1 dark:bg-gray-950 rounded-sm border-1'>
                             {item._sum?.amount && (
-                              <>
-                                <p className='text-xs text-gray-400'>
-                                  {Math.ceil(
-                                    (item._sum?.amount / balanceData) * 100
-                                  )}
-                                  % (of total balance)
-                                </p>
-                              </>
+                              <div
+                                className='dark:bg-green-900 bg-green-500 h-full rounded-sm'
+                                style={{
+                                  width: `${Math.ceil(
+                                    (item._sum?.amount / incomeQueryData) * 100
+                                  )}%`,
+                                }}
+                              ></div>
                             )}
                           </div>
-                          <div className='flex gap-1 items-center'>
-                            {
-                              Currencies.find(
-                                (data) => data.currency === currency
-                              )?.symbol
-                            }
-                            <p>{item._sum.amount}</p>
-                          </div>
                         </div>
-                        {/* Progress bar */}
-                        <div className='w-full h-1 dark:bg-gray-950 rounded-sm border-1'>
-                          {item._sum?.amount && (
-                            <div
-                              className='dark:bg-green-900 bg-green-500 h-full rounded-sm'
-                              style={{
-                                width: `${Math.ceil(
-                                  (item._sum?.amount / incomeQueryData) * 100
-                                )}%`,
-                              }}
-                            ></div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                ) : (
+                  <p className='text-sm text-gray-300'>
+                    No income found for this period.
+                  </p>
+                )}
               </SkeletonWrapper>
             </div>
           </div>
@@ -197,54 +205,63 @@ export function TransactionsBalance({
               <h3 className='text-1xl font-bold'>Expense by category</h3>
               <Spacer size={6} />
               <SkeletonWrapper isLoading={isPendingCategories} fullWidth>
-                {categoriesQueryData
-                  ?.filter((data) => data.type === 'expense')
-                  .map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className='flex h-[50px] gap-2 flex-col overflow-hidden'
-                      >
-                        <div className='flex justify-between w-full '>
-                          <div className='flex gap-2 items-center'>
-                            {item.categoryIcon}
-                            <p className='text-sm'>{item.category}</p>
+                {!isPendingCategories &&
+                categoriesQueryData &&
+                categoriesQueryData?.filter((data) => data.type === 'expense')
+                  .length > 0 ? (
+                  categoriesQueryData
+                    ?.filter((data) => data.type === 'expense')
+                    .map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className='flex h-[50px] gap-2 flex-col overflow-hidden'
+                        >
+                          <div className='flex justify-between w-full '>
+                            <div className='flex gap-2 items-center'>
+                              {item.categoryIcon}
+                              <p className='text-sm'>{item.category}</p>
+                              {item._sum?.amount && (
+                                <>
+                                  <p className='text-xs text-gray-400'>
+                                    {Math.ceil(
+                                      (item._sum?.amount / budget) * 100
+                                    )}
+                                    % (of total income)
+                                  </p>
+                                </>
+                              )}
+                            </div>
+                            <div className='flex gap-1 items-center'>
+                              {
+                                Currencies.find(
+                                  (data) => data.currency === currency
+                                )?.symbol
+                              }
+                              <p>{item._sum.amount}</p>
+                            </div>
+                          </div>
+                          {/* Progress bar */}
+                          <div className='w-full h-1 dark:bg-gray-950 border-1 rounded-sm'>
                             {item._sum?.amount && (
-                              <>
-                                <p className='text-xs text-gray-400'>
-                                  {Math.ceil(
+                              <div
+                                className='dark:bg-red-900 bg-red-500 h-full rounded-sm'
+                                style={{
+                                  width: `${Math.ceil(
                                     (item._sum?.amount / budget) * 100
-                                  )}
-                                  % (of total income)
-                                </p>
-                              </>
+                                  )}%`,
+                                }}
+                              ></div>
                             )}
                           </div>
-                          <div className='flex gap-1 items-center'>
-                            {
-                              Currencies.find(
-                                (data) => data.currency === currency
-                              )?.symbol
-                            }
-                            <p>{item._sum.amount}</p>
-                          </div>
                         </div>
-                        {/* Progress bar */}
-                        <div className='w-full h-1 dark:bg-gray-950 border-1 rounded-sm'>
-                          {item._sum?.amount && (
-                            <div
-                              className='dark:bg-red-900 bg-red-500 h-full rounded-sm'
-                              style={{
-                                width: `${Math.ceil(
-                                  (item._sum?.amount / budget) * 100
-                                )}%`,
-                              }}
-                            ></div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                ) : (
+                  <p className='text-sm text-gray-300'>
+                    No expense found for this period.
+                  </p>
+                )}
               </SkeletonWrapper>
             </div>
           </div>
@@ -253,67 +270,3 @@ export function TransactionsBalance({
     </>
   );
 }
-
-const overviewBalance = [
-  {
-    title: 'Income',
-    value: 1000,
-    icon: '💰',
-    type: 'income',
-  },
-  {
-    title: 'Expense',
-    value: 1000,
-    icon: '💰',
-    type: 'expense',
-  },
-  {
-    title: 'Balance',
-    value: 1000,
-    icon: '💰',
-    type: 'balance',
-  },
-];
-
-const incomeData = [
-  {
-    title: 'Cat name',
-    amount: 1000,
-    icon: '💰',
-    type: 'income',
-  },
-  {
-    title: 'Cat name2',
-    amount: 1000,
-    icon: '💰',
-    type: 'income',
-  },
-
-  {
-    title: 'Cat name3',
-    amount: 1000,
-    icon: '💰',
-    type: 'income',
-  },
-];
-const expenseData = [
-  {
-    title: 'Cat name',
-    amount: 1000,
-    icon: '💰',
-    type: 'expense',
-  },
-  {
-    title: 'Cat name2',
-    amount: 1000,
-    icon: '💰',
-    type: 'expense',
-  },
-
-  {
-    title: 'Cat name3',
-    amount: 1000,
-    icon: '💰',
-    type: 'expense',
-  },
-];
