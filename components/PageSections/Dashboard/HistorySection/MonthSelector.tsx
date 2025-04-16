@@ -25,13 +25,12 @@ type Props = {
 };
 
 export function MonthSelector({ years, period, setPeriod }: Props) {
-  console.log('🚀 ~ YearSelector ~ period:', period);
   return (
     <Select
       value={period.month.toString()}
       onValueChange={(value) => setPeriod({ ...period, month: Number(value) })}
     >
-      <SelectTrigger>
+      <SelectTrigger asChild>
         <Button variant={'outline'} className='w-[150px] justify-between'>
           {MONTHS[period.month - 1].name} <ChevronDown />
         </Button>

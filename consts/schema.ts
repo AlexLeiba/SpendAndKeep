@@ -55,3 +55,19 @@ export const OverviewQuerySchema = z
   });
 
 export type OverviewQuerySchemaType = z.infer<typeof OverviewQuerySchema>;
+
+export const GetHistoryDataSchema = z.object({
+  timeframe: z.enum(['month', 'year']),
+  month: z.coerce
+    .number()
+    .min(0, 'Month is too low')
+    .max(11, 'Month is too high')
+    .default(0),
+  year: z.coerce
+    .number()
+    .min(1900, 'Year is too low')
+    .max(3000, 'Year is too high')
+    .default(new Date().getFullYear()),
+});
+
+export type GetHistoryDataSchemaType = z.infer<typeof GetHistoryDataSchema>;

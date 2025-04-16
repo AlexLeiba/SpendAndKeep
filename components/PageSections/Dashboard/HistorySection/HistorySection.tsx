@@ -4,10 +4,9 @@ import { PeriodType, TimeframeType } from '@/lib/types';
 import { UserSettings } from '@prisma/client';
 import { GetFormatterForCurrency } from '@/lib/helpers';
 import { Spacer } from '@/components/ui/spacer';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { HistoryPeriodSelector } from './HistoryPeriodSelector';
-import { SkeletonWrapper } from '@/components/Skeletons/SkeletonWrapper';
 
 export function HistorySection({
   userSettings,
@@ -29,10 +28,8 @@ export function HistorySection({
       <h2 className='text-3xl font-bold'>History</h2>
       <Spacer size={6} />
 
-      <Card>
+      <Card className='rounded-md '>
         <CardHeader className='flex justify-between'>
-          {/* <CardTitle>Timeframe</CardTitle> */}
-
           <div>
             <HistoryPeriodSelector
               period={period}

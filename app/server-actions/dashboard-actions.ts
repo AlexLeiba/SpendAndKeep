@@ -11,7 +11,6 @@ import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 
 export async function createCategory(categoryData: CreateCategorySchemaType) {
-  console.log('🚀 ~ createCategory ~ categoryData:\n\n\n\n\n', categoryData);
   const parsedBody = CreateCategorySchema.safeParse(categoryData);
 
   if (!parsedBody.success) {

@@ -29,7 +29,7 @@ export function YearSelector({ years, period, setPeriod }: Props) {
       value={period.year.toString()}
       onValueChange={(value) => setPeriod({ ...period, year: Number(value) })}
     >
-      <SelectTrigger>
+      <SelectTrigger asChild>
         <Button variant={'outline'} className='w-[150px] justify-between'>
           {period.year} <ChevronDown />
         </Button>
