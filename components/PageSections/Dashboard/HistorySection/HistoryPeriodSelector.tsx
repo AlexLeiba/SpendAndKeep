@@ -27,7 +27,6 @@ export function HistoryPeriodSelector({
         return response.json();
       },
     });
-  console.log('🚀 ~ historyPeriods:', historyByYearData);
 
   return (
     <div className='flex flex-wrap items-center gap-4'>

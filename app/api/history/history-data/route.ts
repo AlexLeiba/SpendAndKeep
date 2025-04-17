@@ -97,11 +97,11 @@ async function getMonthHistoryData(
   // Loop through all months to add missing months in our response
   const daysInMonth = getDaysInMonth(new Date(year, month)); //get the number of days in the month
 
-  for (let i = 0; i < daysInMonth; i++) {
+  for (let index = 0; index < daysInMonth; index++) {
     let expense = 0;
     let income = 0;
 
-    const day = result.find((data) => data.day === i); //find the day in the result
+    const day = result.find((data) => data.day === index); //find the day in the result
     if (day) {
       expense = day._sum.expense || 0;
       income = day._sum.income || 0;
@@ -113,11 +113,10 @@ async function getMonthHistoryData(
       income: income,
       expense: expense,
       year: year,
-      day: i, // i is the index of the missing days from response
+      day: index, // i is the index of the missing days from response
     });
-
-    return history;
   }
+  return history;
 }
 
 type HistoryFilteredType = {
@@ -161,11 +160,11 @@ async function getYearHistoryData(userId: string, year: number) {
   const history: HistoryFilteredType[] = [];
   // Loop through all months to add missing months in our response
 
-  for (let i = 0; i < 12; i++) {
+  for (let index = 0; index < 12; index++) {
     let expense = 0;
     let income = 0;
 
-    const month = result.find((data) => data.month === i); //find the month in the result
+    const month = result.find((data) => data.month === index); //find the month in the result
     if (month) {
       expense = month._sum.expense || 0;
       income = month._sum.income || 0;
@@ -173,13 +172,12 @@ async function getYearHistoryData(userId: string, year: number) {
 
     history.push({
       //the rest of the months which werent found in (response) will be added with (expense/income = 0) default values in (response data)
-      month: i,
+      month: index,
       income: income,
       expense: expense,
       year: year,
       day: 0,
     });
-
-    return history;
   }
+  return history;
 }

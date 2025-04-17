@@ -32,14 +32,14 @@ export function MonthSelector({ years, period, setPeriod }: Props) {
     >
       <SelectTrigger asChild>
         <Button variant={'outline'} className='w-[150px] justify-between'>
-          {MONTHS[period.month - 1].name} <ChevronDown />
+          {MONTHS[period.month].name} <ChevronDown />
         </Button>
       </SelectTrigger>
 
       <SelectContent>
         <SelectGroup>
           {MONTHS.map((month) => (
-            <SelectItem key={month.id} value={(month.id + 1).toString()}>
+            <SelectItem key={month.id} value={month.id.toString()}>
               {month.name}
             </SelectItem>
           ))}
