@@ -5,7 +5,6 @@ import { UserSettings } from '@prisma/client';
 import { GetFormatterForCurrency } from '@/lib/helpers';
 import { Spacer } from '@/components/ui/spacer';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { HistoryPeriodSelector } from './HistoryPeriodSelector';
 import { useQuery } from '@tanstack/react-query';
 import { SkeletonWrapper } from '@/components/Skeletons/SkeletonWrapper';
@@ -13,8 +12,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
-  Line,
   Rectangle,
   ResponsiveContainer,
   Tooltip,
@@ -22,6 +19,7 @@ import {
   YAxis,
 } from 'recharts';
 import { CustomChartTooltip } from './CustomChartTooltip';
+import { HistoryDataType } from '@/app/api/history/history-data/route';
 
 export function HistorySection({
   userSettings,
@@ -38,16 +36,16 @@ export function HistorySection({
     return GetFormatterForCurrency(userSettings.currency);
   }, [userSettings.currency]);
 
-  const { isPending: isPendingHistoryData, data: historyData } = useQuery({
-    queryKey: ['overview', 'history', timeframe, period],
-    queryFn: async () => {
-      const response = await fetch(
-        `/api/history/history-data?timeframe=${timeframe}&month=${period.month}&year=${period.year}`
-      );
-      return response.json();
-    },
-  });
-  console.log('🚀 ~ historyData:=>>>>>>>>>>>>>>', historyData);
+  const { isPending: isPendingHistoryData, data: historyData } =
+    useQuery<HistoryDataType>({
+      queryKey: ['overview', 'history', timeframe, period],
+      queryFn: async () => {
+        const response = await fetch(
+          `/api/history/history-data?timeframe=${timeframe}&month=${period.month}&year=${period.year}`
+        );
+        return response.json();
+      },
+    });
 
   return (
     <div>
@@ -82,7 +80,6 @@ export function HistorySection({
             {historyData && historyData.length > 0 ? (
               <ResponsiveContainer width='100%' height={300}>
                 <BarChart height={300} data={historyData} barCategoryGap={2}>
-                  {/* <defs></defs> */}
                   <CartesianGrid
                     strokeDasharray={'5 5'}
                     strokeOpacity={'0.5'}
@@ -90,19 +87,18 @@ export function HistorySection({
                   <XAxis
                     stroke='#888888'
                     fontSize={16}
-                    tickLine={false}
-                    axisLine={false}
                     dataKey={(data) => {
+                      // The key which will represent the x-axis time period. ex: 1, 2, 3, 4, 5 / Jan, Feb, Mar, Apr, May
                       const { day, month, year } = data;
                       const date = new Date(year, month, day + 1);
 
                       if (timeframe === 'year') {
                         return date.toLocaleDateString('en-US', {
-                          month: 'short', //name of month
+                          month: 'short', //return name of month
                         });
                       }
                       return date.toLocaleDateString('en-US', {
-                        day: 'numeric', //number of day
+                        day: 'numeric', //returnnumber of day
                       });
                     }}
                   />
@@ -113,8 +109,10 @@ export function HistorySection({
                     axisLine={false}
                   />
                   <Tooltip
-                    cursor={{ opacity: 1 }}
-                    content={(data) => <CustomChartTooltip data={data} />}
+                    cursor={{ opacity: 0.1 }}
+                    content={(data) => (
+                      <CustomChartTooltip data={data} formatter={formatter} />
+                    )}
                   />
 
                   <Bar
