@@ -1,5 +1,5 @@
-import { CurrencyComboBox } from '@/components/CurrencyComboBox';
 import { Logo } from '@/components/Logo';
+import { CurrencyComboBox } from '@/components/PageSections/Dashboard/HelloTopSection/CurrencyComboBox';
 import { Button } from '@/components/ui/button';
 import {
   Card,
