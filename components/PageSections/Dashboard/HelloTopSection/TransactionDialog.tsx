@@ -74,7 +74,7 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
 
       reset();
       setOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['overview-transactions'] }); // refetch transactions overview on Dashboard page
+      queryClient.invalidateQueries({ queryKey: ['overview'] }); // refetch transactions overview on Dashboard page
     },
     onError: () => {
       toast.error('Something went wrong 🥺, please try again', {

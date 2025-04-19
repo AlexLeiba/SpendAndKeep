@@ -39,9 +39,11 @@ import { Category } from '@prisma/client';
 export function CreateCategoryDialog({
   type,
   handleSuccessCreatedCategory,
+  refetchCategoriesList,
 }: {
   type: TransactionType;
   handleSuccessCreatedCategory?: (category: Category) => void;
+  refetchCategoriesList?: () => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const formMethods = useForm({
@@ -73,9 +75,11 @@ export function CreateCategoryDialog({
       reset();
       setOpen(false);
 
+      refetchCategoriesList?.();
+
       // to refetch the categories query
       await queryClient.invalidateQueries({
-        queryKey: ['categories', 'categoryList'],
+        queryKey: ['categories'],
       });
     },
     onError: () => {

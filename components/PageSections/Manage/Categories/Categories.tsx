@@ -17,16 +17,19 @@ export function Categories() {
   const [categoryType, setCategoryType] = React.useState<'Income' | 'Expense'>(
     'Expense'
   );
-  const { data: categoriesQueryData, isPending: isPendingCategories } =
-    useQuery<Category[]>({
-      queryKey: ['categoryList', categoryType], // if we put query param here after key, IF the parameter will change the query gets refetched auto.
-      queryFn: async () => {
-        const response = await fetch(
-          `/api/categories?category=${categoryType.toLowerCase()}`
-        );
-        return response.json();
-      },
-    });
+  const {
+    data: categoriesQueryData,
+    isPending: isPendingCategories,
+    refetch: refetchCategoriesList,
+  } = useQuery<Category[]>({
+    queryKey: ['overview', 'categoryList', categoryType], // if we put query param here after key, IF the parameter will change the query gets refetched auto.
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/categories?category=${categoryType.toLowerCase()}`
+      );
+      return response.json();
+    },
+  });
 
   const { mutate: removeCategory, isPending: isPendingRemoveCategory } =
     useMutation({
@@ -36,7 +39,9 @@ export function Categories() {
           id: 'remove-category',
         });
 
-        queryClient.invalidateQueries({ queryKey: ['overview', 'categories'] }); // refetch transactions overview on Dashboard page
+        queryClient.invalidateQueries({
+          queryKey: ['overview', 'categoryList'],
+        }); // refetch transactions overview on Dashboard page
       },
       onError: () => {
         toast.error('Something went wrong 🥺, please try again', {
@@ -48,7 +53,7 @@ export function Categories() {
     <div>
       <Card className='rounded-md'>
         <CardHeader className='flex justify-between '>
-          {/* CREATE NEW CATEGORY DIALOG (MODAL) */}
+          {/* CREATE NEW CATEGORY DIALOG (MODAL) INCOME */}
           <div className='flex justify-between flex-col gap-2'>
             <div className='flex gap-2 items-center'>
               <div className='w-10 h-10 rounded-sm dark:bg-green-900 bg-green-300 flex items-center justify-center text-white'>
@@ -61,12 +66,15 @@ export function Categories() {
                 </p>
               </div>
             </div>
-            <CreateCategoryDialog type={'income'} />
+            <CreateCategoryDialog
+              type={'income'}
+              refetchCategoriesList={refetchCategoriesList}
+            />
           </div>
-          {/* CREATE NEW CATEGORY DIALOG (MODAL) */}
 
           <Spacer lg={12} md={6} sm={6} />
 
+          {/* CREATE NEW CATEGORY DIALOG (MODAL) EXPENSE*/}
           <div className='flex justify-between flex-col gap-2'>
             <div className='flex gap-2 items-center'>
               <div className='w-10 h-10 rounded-sm dark:bg-red-900 bg-red-300 flex items-center justify-center text-white'>
@@ -79,7 +87,10 @@ export function Categories() {
                 </p>
               </div>
             </div>
-            <CreateCategoryDialog type={'expense'} />
+            <CreateCategoryDialog
+              type={'expense'}
+              refetchCategoriesList={refetchCategoriesList}
+            />
           </div>
         </CardHeader>
       </Card>
@@ -122,6 +133,7 @@ export function Categories() {
                       </div>
 
                       <Button
+                        disabled={isPendingRemoveCategory}
                         onClick={() => {
                           toast.loading('Removing category...', {
                             id: 'remove-category',
