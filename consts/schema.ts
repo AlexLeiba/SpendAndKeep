@@ -43,6 +43,7 @@ export const OverviewQuerySchema = z
   .object({
     from: z.coerce.date(),
     to: z.coerce.date(),
+    page: z.coerce.number().default(1),
   })
   .refine((data) => {
     const { from, to } = data;

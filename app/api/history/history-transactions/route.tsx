@@ -14,10 +14,12 @@ export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const fromDate = searchParams.get('from');
   const toDate = searchParams.get('to');
+  const page = searchParams.get('page') || 1;
 
   const validatedData = OverviewQuerySchema.safeParse({
     from: fromDate,
     to: toDate,
+    page: page,
   });
 
   if (!validatedData.success) {
@@ -29,7 +31,8 @@ export async function GET(request: Request) {
   const transactionsWithFormattedCurrency = await getTransactionsHistory(
     user.id,
     validatedData.data.from,
-    validatedData.data.to
+    validatedData.data.to,
+    validatedData.data.page
   );
 
   return Response.json(transactionsWithFormattedCurrency);
@@ -39,7 +42,12 @@ export type TransactionHistoryType = Awaited<
   ReturnType<typeof getTransactionsHistory>
 >;
 
-async function getTransactionsHistory(userId: string, from: Date, to: Date) {
+async function getTransactionsHistory(
+  userId: string,
+  from: Date,
+  to: Date,
+  page: number = 1
+) {
   const userSettings = await prismaDB.userSettings.findUnique({
     where: {
       userId: userId,
@@ -50,6 +58,20 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
     throw new Error('User settings not found');
   }
   const formatter = GetFormatterForCurrency(userSettings.currency);
+
+  const totalCount = await prismaDB.transaction.count({
+    where: {
+      userId,
+      date: {
+        gte: from,
+        lte: to,
+      },
+    },
+  });
+
+  if (!totalCount) {
+    throw new Error('No transactions found');
+  }
 
   const transactionsHistory = await prismaDB.transaction.findMany({
     where: {
@@ -62,9 +84,15 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
     orderBy: {
       date: 'desc',
     },
+    skip: (page - 1) * 10,
+    take: 10,
   });
 
   return transactionsHistory.map((data) => {
-    return { ...data, formattedAmount: formatter.format(data.amount) };
+    return {
+      ...data,
+      formattedAmount: formatter.format(data.amount),
+      allTransactions: totalCount, // Virtual field only in the response
+    };
   });
 }

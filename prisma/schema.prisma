@@ -50,6 +50,8 @@ model Transaction {
   category String
   categoryIcon String
 
+  // allTransactions Float @default(0)
+
 
 }
 

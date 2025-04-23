@@ -19,12 +19,14 @@ export function TransactionsTable() {
     to: new Date(),
   });
 
+  const [page, setPage] = React.useState(1);
+
   const { data: transactionsQueryData, isPending: isPendingTransactions } =
     useQuery<TransactionHistoryType>({
-      queryKey: ['transactions', dateRange.from, dateRange.to],
+      queryKey: ['transactions', dateRange.from, dateRange.to, page],
       queryFn: () => {
         const response = fetch(
-          `/api/history/history-transactions?from=${dateRange.from}&to=${dateRange.to}`
+          `/api/history/history-transactions?page=${page}&from=${dateRange.from}&to=${dateRange.to}`
         ).then((res) => res.json());
 
         return response;
@@ -67,7 +69,12 @@ export function TransactionsTable() {
         />
       </div>
       <Spacer lg={12} md={6} sm={6} />
-      <TableComponent data={transactionsQueryData} />
+      <TableComponent
+        setPage={setPage}
+        page={page}
+        data={transactionsQueryData}
+        isPendingDelete={isPendingTransactions}
+      />
     </div>
   );
 }
