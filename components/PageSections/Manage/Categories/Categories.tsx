@@ -27,6 +27,17 @@ export function Categories() {
       const response = await fetch(
         `/api/categories?category=${categoryType.toLowerCase()}`
       );
+      if (response.status !== 200) {
+        return toast.error(
+          response.statusText
+            ? response.statusText
+            : 'Something went wrong, please try again',
+          {
+            id: 'overview',
+          }
+        );
+      }
+
       return response.json();
     },
   });

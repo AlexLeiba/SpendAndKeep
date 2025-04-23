@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { TrendingDown, TrendingUp, Wallet } from 'lucide-react';
 import React from 'react';
 import CountUp from 'react-countup';
+import { toast } from 'sonner';
 
 export function TransactionsBalance({
   currency,
@@ -26,6 +27,18 @@ export function TransactionsBalance({
         const response = await fetch(
           `/api/stats/balance?from=${from}&to=${to}`
         );
+
+        if (response.status !== 200) {
+          return toast.error(
+            response.statusText
+              ? response.statusText
+              : 'Something went wrong, please try again',
+            {
+              id: 'overview',
+            }
+          );
+        }
+
         return response.json();
       },
     });
@@ -38,6 +51,17 @@ export function TransactionsBalance({
         const response = await fetch(
           `/api/stats/categories?from=${from}&to=${to}`
         );
+        if (response.status !== 200) {
+          return toast.error(
+            response.statusText
+              ? response.statusText
+              : 'Something went wrong, please try again',
+            {
+              id: 'overview',
+            }
+          );
+        }
+
         return response.json();
       },
     });
@@ -141,6 +165,7 @@ export function TransactionsBalance({
               <SkeletonWrapper isLoading={isPendingCategories} fullWidth>
                 {!isPendingCategories &&
                 categoriesQueryData &&
+                categoriesQueryData.length > 0 &&
                 categoriesQueryData?.filter((data) => data.type === 'income')
                   .length > 0 ? (
                   categoriesQueryData
@@ -209,6 +234,7 @@ export function TransactionsBalance({
               <SkeletonWrapper isLoading={isPendingCategories} fullWidth>
                 {!isPendingCategories &&
                 categoriesQueryData &&
+                categoriesQueryData.length > 0 &&
                 categoriesQueryData?.filter((data) => data.type === 'expense')
                   .length > 0 ? (
                   categoriesQueryData

@@ -24,12 +24,23 @@ export function TransactionsTable() {
   const { data: transactionsQueryData, isPending: isPendingTransactions } =
     useQuery<TransactionHistoryType>({
       queryKey: ['transactions', dateRange.from, dateRange.to, page],
-      queryFn: () => {
-        const response = fetch(
+      queryFn: async () => {
+        const response = await fetch(
           `/api/history/history-transactions?page=${page}&from=${dateRange.from}&to=${dateRange.to}`
-        ).then((res) => res.json());
+        );
 
-        return response;
+        if (response.status !== 200) {
+          return toast.error(
+            response.statusText
+              ? response.statusText
+              : 'Something went wrong, please try again',
+            {
+              id: 'transactions',
+            }
+          );
+        }
+
+        return response.json();
       },
     });
 

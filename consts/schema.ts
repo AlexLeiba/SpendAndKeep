@@ -39,21 +39,22 @@ export const CreateCategorySchema = z.object({
 
 export type CreateCategorySchemaType = z.infer<typeof CreateCategorySchema>;
 
-export const OverviewQuerySchema = z
-  .object({
-    from: z.coerce.date(),
-    to: z.coerce.date(),
-    page: z.coerce.number().default(1),
-  })
-  .refine((data) => {
-    const { from, to } = data;
+export const OverviewQuerySchema = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date(),
+  page: z.coerce.number().default(1),
+});
+// .refine((data) => {
+//   const { from, to } = data;
 
-    // Check difference between from and to
-    const days = differenceInDays(to, from);
-    const isValidDateRange = days > 0 && days <= MAX_DATE_RANGE_DAYS;
+//   const isTheSameDate = from.getTime() === to.getTime();
 
-    return isValidDateRange;
-  });
+//   // Check difference between from and to
+//   const days = differenceInDays(to, from);
+//   const isValidDateRange = days > 0 && days <= MAX_DATE_RANGE_DAYS;
+
+//   return isValidDateRange;
+// }
 
 export type OverviewQuerySchemaType = z.infer<typeof OverviewQuerySchema>;
 

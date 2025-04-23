@@ -55,3 +55,40 @@ secondary text color: gray-300
 ## Max width 1024px
 
 max-width: max-w-5xl -- 1024px
+
+# Prisma
+
+## npx prisma migrate -
+
+Applies the schema changes.
+
+Creates SQL migration file.
+
+Useful when collaborating or tracking DB changes.
+####################################################
+
+## npx prisma migrate reset
+
+Reset DB and reapply all migrations:
+
+####################################################
+
+## npx prisma generate -
+
+This rebuilds the Prisma Client, based on your current schema.
+
+Must run after changing the schema (models, relations, etc.).
+
+It updates the @prisma/client package so your app gets correct types and functions.
+
+####################################################
+
+## npx prisma db push -
+
+This pushes the schema directly to the database — no migrations, just instant sync.
+
+Great for local/dev environments.
+
+Does not create a migration history.
+
+Super useful after manual DB resets.
