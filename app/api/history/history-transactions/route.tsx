@@ -69,9 +69,9 @@ async function getTransactionsHistory(
     },
   });
 
-  if (!totalCount) {
-    throw new Error('No transactions found');
-  }
+  // if (!totalCount) {
+  //   throw new Error('No transactions found');
+  // }
 
   const transactionsHistory = await prismaDB.transaction.findMany({
     where: {

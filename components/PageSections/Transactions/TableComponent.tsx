@@ -40,24 +40,16 @@ type Props = {
   data: TransactionHistoryType | undefined;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   page: number;
-  isPendingDelete: boolean;
 };
 const emptyData: TransactionHistoryType = [];
 
 export type TransactionHistoryRow = TransactionHistoryType[0]; //transformed type Array in OBJECT
 
-export function TableComponent({
-  data,
-  setPage,
-  page,
-  isPendingDelete,
-}: Props) {
-  const [deleteModalOpen, setDeleteModalOpen] = React.useState(true);
+export function TableComponent({ data, setPage, page }: Props) {
   const queryClient = useQueryClient();
   const {
-    data: transactionsHistory,
-    isPending: isPendingTransactionsHistory,
-    mutate: handleDeleteTransaction,
+    isPending: isPendingDeleteTransaction,
+    mutate: handleDeleteTransactionMutation,
   } = useMutation({
     mutationKey: ['transactionsHistory'],
     mutationFn: DeleteTransactions,
@@ -77,6 +69,13 @@ export function TableComponent({
       });
     },
   });
+
+  function handleDeleteTransaction(id: string) {
+    toast.loading('Deleting transaction...', {
+      id: 'deleting-transaction',
+    });
+    handleDeleteTransactionMutation(id);
+  }
 
   const tableColumns: ColumnDef<TransactionHistoryRow>[] = [
     {
@@ -101,7 +100,7 @@ export function TableComponent({
       cell: ({ row }) => {
         return (
           <div className='flex gap-2 items-center'>
-            {format(row.original.updatedAt, 'PPP')}
+            {row.original?.createdAt && format(row.original.createdAt, 'PPP')}
           </div>
         );
       },
@@ -112,7 +111,7 @@ export function TableComponent({
       cell: ({ row }) => {
         return (
           <div className='flex gap-2 items-center'>
-            {format(row.original.date, 'PPP')}
+            {row.original?.date && format(row.original.date, 'PPP')}
           </div>
         );
       },
@@ -148,7 +147,7 @@ export function TableComponent({
             {/* DROPDOWN */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button disabled={isPendingDelete} variant={'ghost'}>
+                <Button disabled={isPendingDeleteTransaction} variant={'ghost'}>
                   ...
                 </Button>
               </PopoverTrigger>
@@ -207,18 +206,22 @@ export function TableComponent({
       });
     }
   }
+  console.log('first', data?.[0]?.allTransactions);
   return (
     <SkeletonWrapper isLoading={!data}>
       <div className='flex justify-between items-center'>
         <p className='text-xs dark:text-gray-300'>
-          Total transactions: {data?.[0]?.allTransactions}
+          Total transactions: {data?.[0]?.allTransactions || 0}
         </p>
         <div className='flex items-center gap-2'>
+          {/* Total transactions */}
           <p className='text-xs'>
             Page: {page} /{' '}
-            {data?.[0]?.allTransactions &&
-              Math.ceil(data?.[0].allTransactions / 10)}
+            {(data?.[0]?.allTransactions &&
+              Math.ceil(data?.[0].allTransactions / 10)) ||
+              1}
           </p>
+          {/* Prev page button */}
           <Button
             disabled={page === 1}
             variant={'ghost'}
@@ -226,12 +229,15 @@ export function TableComponent({
           >
             <ChevronLeft />
           </Button>
+
+          {/* Next page button */}
           <Button
             variant={'ghost'}
             onClick={() => handleChangePage('next')}
             disabled={
               data?.[0]?.allTransactions
-                ? data?.[0]?.allTransactions < 10
+                ? data?.[0]?.allTransactions < 10 ||
+                  page * 10 > data?.[0].allTransactions
                 : false
             }
           >

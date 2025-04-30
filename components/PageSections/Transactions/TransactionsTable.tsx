@@ -84,7 +84,6 @@ export function TransactionsTable() {
         setPage={setPage}
         page={page}
         data={transactionsQueryData}
-        isPendingDelete={isPendingTransactions}
       />
     </div>
   );
