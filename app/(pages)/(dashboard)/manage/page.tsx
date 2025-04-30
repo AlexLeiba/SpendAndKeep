@@ -5,7 +5,7 @@ import React from 'react';
 function ManagePage() {
   return (
     <div>
-      <Spacer size={6} />
+      <Spacer lg={6} md={6} size={3} />
       <h2 className='text-3xl font-bold'>Manage</h2>
       <p className='text-sm text-gray-400 '>Manage your categories.</p>
       <Spacer lg={12} md={6} sm={6} />

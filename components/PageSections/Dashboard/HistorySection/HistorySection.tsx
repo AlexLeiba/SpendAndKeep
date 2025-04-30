@@ -52,7 +52,7 @@ export function HistorySection({
       <h2 className='text-3xl font-bold'>History</h2>
       <Spacer size={6} />
 
-      <Card className='rounded-md'>
+      <Card className='rounded-md '>
         <CardHeader className='flex justify-between items-center'>
           <div>
             <HistoryPeriodSelector
@@ -75,7 +75,7 @@ export function HistorySection({
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className=' w-full'>
           <SkeletonWrapper isLoading={isPendingHistoryData}>
             {historyData && historyData.length > 0 ? (
               <ResponsiveContainer width='100%' height={300}>

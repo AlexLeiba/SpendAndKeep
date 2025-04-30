@@ -28,6 +28,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DeleteTransactions } from '@/app/server-actions/transactions-actions';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 type Props = {
   data: TransactionHistoryType | undefined;
@@ -45,6 +52,7 @@ export function TableComponent({
   page,
   isPendingDelete,
 }: Props) {
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(true);
   const queryClient = useQueryClient();
   const {
     data: transactionsHistory,
@@ -93,7 +101,18 @@ export function TableComponent({
       cell: ({ row }) => {
         return (
           <div className='flex gap-2 items-center'>
-            {format(row.original.createdAt, 'PPP')}
+            {format(row.original.updatedAt, 'PPP')}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'date',
+      header: 'Transaction date',
+      cell: ({ row }) => {
+        return (
+          <div className='flex gap-2 items-center'>
+            {format(row.original.date, 'PPP')}
           </div>
         );
       },
@@ -109,7 +128,9 @@ export function TableComponent({
         return (
           <div
             className={cn(
-              row.original.type === 'income' ? 'bg-green-800' : 'bg-red-800',
+              row.original.type === 'income'
+                ? 'bg-green-800 text-white'
+                : 'bg-red-800 text-white',
               'p-2 rounded-md'
             )}
           >
@@ -124,6 +145,7 @@ export function TableComponent({
       cell: ({ row }) => {
         return (
           <div className='flex justify-center items-center'>
+            {/* DROPDOWN */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button disabled={isPendingDelete} variant={'ghost'}>
@@ -133,12 +155,32 @@ export function TableComponent({
 
               <PopoverContent className='flex gap-1 flex-col'>
                 <p>Delete transaction</p>
-                <Button
-                  disabled={isPendingDelete}
-                  onClick={() => handleDeleteTransaction(row.original.id)}
-                >
-                  Delete
-                </Button>
+
+                {/* DELETE MODAL */}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Delete</Button>
+                  </DialogTrigger>
+
+                  <DialogContent>
+                    <DialogTitle asChild className='text-md'>
+                      <p>
+                        Are you sure you want to delete "
+                        {row.original.description}" transaction?
+                      </p>
+                    </DialogTitle>
+                    <Button
+                      variant={'destructive'}
+                      onClick={() => handleDeleteTransaction(row.original.id)}
+                    >
+                      Yes
+                    </Button>
+
+                    <DialogClose asChild>
+                      <Button>Cancel</Button>
+                    </DialogClose>
+                  </DialogContent>
+                </Dialog>
               </PopoverContent>
             </Popover>
           </div>
@@ -168,7 +210,7 @@ export function TableComponent({
   return (
     <SkeletonWrapper isLoading={!data}>
       <div className='flex justify-between items-center'>
-        <p className='text-xs text-gray-300'>
+        <p className='text-xs dark:text-gray-300'>
           Total transactions: {data?.[0]?.allTransactions}
         </p>
         <div className='flex items-center gap-2'>

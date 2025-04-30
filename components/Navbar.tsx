@@ -31,13 +31,13 @@ export function Navbar() {
   return (
     <>
       {/* Desktop Navbar */}
-      <div className='hidden border-separate border-b md:block fixed top-0 right-0 left-0 z-50  dark:bg-gray-950 bg-gray-300'>
+      <div className='hidden border-separate border-b md:block  right-0 left-0 z-50  dark:bg-gray-950 bg-gray-300 fixed top-0'>
         <div className=' max-w-5xl mx-auto  '>
           <nav className='glex items-center justify-between px-8'>
             <div className='flex h-[65px] min-h-[60px] items-center gap-x-8'>
               <Logo />
 
-              {/* links */}
+              {/* links on dashboard */}
               {pathname !== '/wizard' ? (
                 <div className='flex w-full gap-4 items-center'>
                   {linkItems.map((data, index) => {
@@ -70,7 +70,9 @@ export function Navbar() {
 
               <div className='flex items-center gap-4'>
                 <ThemeToggle />
-                <UserButton />
+                <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
+                  <UserButton />
+                </div>
               </div>
             </div>
           </nav>
@@ -78,7 +80,7 @@ export function Navbar() {
       </div>
 
       {/* Mobile Navbar */}
-      <div className='block   dark:bg-background md:hidden   '>
+      <div className='block    md:hidden  fixed top-0 left-0 right-0  dark:bg-gray-950 bg-gray-300'>
         <nav className='flex  px-6 h-[60px] min-h-[60px] items-center justify-between w-full'>
           <div className='flex justify-between items-center w-full'>
             {/* links */}
@@ -100,7 +102,9 @@ export function Navbar() {
                   <DialogTitle>Menu</DialogTitle>
                   <div className='flex items-center gap-2'>
                     <p className='text-xs'>Profile</p>
-                    <UserButton />
+                    <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
+                      <UserButton />
+                    </div>
                   </div>
                   {linkItems.map((data, index) => {
                     const isActive = pathname === data.href.toLowerCase();
@@ -131,8 +135,9 @@ export function Navbar() {
               </Sheet>
             </div>
             <Logo />
-
-            <UserButton />
+            <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
+              <UserButton />
+            </div>
           </div>
         </nav>
       </div>

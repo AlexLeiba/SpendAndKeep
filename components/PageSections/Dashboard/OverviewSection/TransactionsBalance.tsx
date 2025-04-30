@@ -111,28 +111,30 @@ export function TransactionsBalance({
   const budget = 10000;
   return (
     <>
-      <div className='grid gap-2'>
+      <div className='grid gap-4'>
         <div className='grid grid-cols-3  gap-2 '>
           {overviewStatsData.map((item, index) => {
             //3 STATS CARDS
             return (
               <div key={index}>
-                <div className='flex  gap-2 dark:bg-gray-950 rounded-sm p-6 w-full h-full border-1 '>
-                  {item.type === 'income' && (
-                    <div className='w-10 h-full rounded-sm dark:bg-green-900 bg-green-300 flex items-center justify-center text-white'>
-                      <TrendingUp />
-                    </div>
-                  )}
-                  {item.type === 'expense' && (
-                    <div className='w-10 h-full rounded-sm dark:bg-red-900 bg-red-300 flex items-center justify-center text-white'>
-                      <TrendingDown />
-                    </div>
-                  )}
-                  {item.type === 'balance' && (
-                    <div className='w-10 h-full rounded-sm dark:bg-purple-900 bg-purple-300 flex items-center justify-center text-white'>
-                      <Wallet />
-                    </div>
-                  )}
+                <div className='flex  gap-2 dark:bg-gray-950 rounded-sm p-6 w-full h-full border-1 lg:flex-row md:flex-row flex-col '>
+                  <div>
+                    {item.type === 'income' && (
+                      <div className='w-10 h-full rounded-sm dark:bg-green-900 bg-green-300 flex items-center justify-center text-white'>
+                        <TrendingUp />
+                      </div>
+                    )}
+                    {item.type === 'expense' && (
+                      <div className='w-10 h-full rounded-sm dark:bg-red-900 bg-red-300 flex items-center justify-center text-white'>
+                        <TrendingDown />
+                      </div>
+                    )}
+                    {item.type === 'balance' && (
+                      <div className='w-10 h-full rounded-sm dark:bg-purple-900 bg-purple-300 flex items-center justify-center text-white'>
+                        <Wallet />
+                      </div>
+                    )}
+                  </div>
 
                   <div className='grid grid-cols-1 '>
                     <span className='font-bold'>{item.title}</span>
@@ -155,7 +157,7 @@ export function TransactionsBalance({
           })}
         </div>
 
-        <div className='grid grid-cols-2 gap-x-2 '>
+        <div className='grid lg:grid-cols-2 md:grid-cols-2 gap-x-2 lg:gap-y-0 md:gap-y-0 gap-y-4 '>
           {/* BY CATEGORY */}
           <div className='grid   gap-x-2 '>
             {/*INCOME CARD */}
@@ -224,7 +226,7 @@ export function TransactionsBalance({
               </SkeletonWrapper>
             </div>
           </div>
-
+          {/* <Spacer size={6} /> */}
           {/* BY EXPENSE */}
           <div className='grid  gap-x-2 '>
             {/*EXPENSE CARD */}

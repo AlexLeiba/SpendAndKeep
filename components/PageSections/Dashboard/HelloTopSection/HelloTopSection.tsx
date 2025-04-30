@@ -10,8 +10,8 @@ export function HelloTopSection() {
   const { user } = useUser();
   return (
     <div className='w-full border-b  '>
-      <Spacer size={6} />
-      <div className='flex justify-between'>
+      <Spacer lg={6} md={6} size={3} />
+      <div className='flex justify-between lg:flex-row md:flex-row flex-col gap-2'>
         <p className=' text-3xl font-bold'>
           Hello,{' '}
           {user?.firstName

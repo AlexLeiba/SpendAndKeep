@@ -64,7 +64,7 @@ export function TransactionsTable() {
 
   return (
     <div className='flex flex-col'>
-      <div className='flex justify-between items-center '>
+      <div className='flex justify-between lg:items-center md:items-center lg:flex-row md:flex-row flex-col gap-4'>
         <div>
           <h2 className='text-3xl font-bold'>Transactions history</h2>
           <p className='text-sm text-gray-400 '>Manage your transactions.</p>

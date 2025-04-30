@@ -63,7 +63,7 @@ export function Categories() {
   return (
     <div>
       <Card className='rounded-md'>
-        <CardHeader className='flex justify-between '>
+        <CardHeader className='flex justify-between lg:flex-row md:flex-row flex-col '>
           {/* CREATE NEW CATEGORY DIALOG (MODAL) INCOME */}
           <div className='flex justify-between flex-col gap-2'>
             <div className='flex gap-2 items-center'>

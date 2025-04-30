@@ -49,7 +49,7 @@ export function OverviewSection({
           onUpdate={(values) => handleDateRangeChange(values)}
           initialDateFrom={dateRange.from}
           initialDateTo={dateRange.to}
-          align='start'
+          align='end'
           locale='ro-RO'
           showCompare={false}
         />

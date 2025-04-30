@@ -5,7 +5,7 @@ import React from 'react';
 function TransactionsPage() {
   return (
     <div>
-      <Spacer size={6} />
+      <Spacer lg={6} md={6} size={3} />
 
       <TransactionsTable />
     </div>
