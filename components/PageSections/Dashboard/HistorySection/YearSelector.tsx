@@ -23,7 +23,6 @@ type Props = {
   >;
 };
 export function YearSelector({ years, period, setPeriod }: Props) {
-  console.log('🚀 ~ YearSelector ~ period:', period);
   return (
     <Select
       value={period.year.toString()}

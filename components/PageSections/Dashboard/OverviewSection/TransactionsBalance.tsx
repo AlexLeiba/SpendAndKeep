@@ -66,8 +66,6 @@ export function TransactionsBalance({
       },
     });
 
-  console.log('🚀 ~ statsQueryData:', statsQueryData);
-  console.log('🚀 ~ categoriesQueryData:', categoriesQueryData);
   //used useMemo to avoid recalculation at each Render
   const formatter = React.useMemo(() => {
     return GetFormatterForCurrency(currency);

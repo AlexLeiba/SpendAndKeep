@@ -206,7 +206,7 @@ export function TableComponent({ data, setPage, page }: Props) {
       });
     }
   }
-  console.log('first', data?.[0]?.allTransactions);
+
   return (
     <SkeletonWrapper isLoading={!data}>
       <div className='flex justify-between items-center'>
