@@ -1,16 +1,18 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Logo } from './Logo';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/lib/ThemeToggle';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
 import { DialogTitle } from './ui/dialog';
 
 export function Navbar() {
+  const [hasUser, setHasUser] = React.useState(false);
+  const userData = useUser();
   const pathname = usePathname();
   const [isOpenedMenu, setIsOpenedMenu] = React.useState(false);
 
@@ -28,6 +30,10 @@ export function Navbar() {
       href: '/manage',
     },
   ];
+
+  useEffect(() => {
+    setHasUser(!!userData.user);
+  }, [userData]);
   return (
     <>
       {/* Desktop Navbar */}
@@ -40,29 +46,30 @@ export function Navbar() {
               {/* links on dashboard */}
               {pathname !== '/wizard' ? (
                 <div className='flex w-full gap-4 items-center'>
-                  {linkItems.map((data, index) => {
-                    const isActive = pathname === data.href.toLowerCase();
-                    return (
-                      <Link
-                        key={index}
-                        href={data.href}
-                        className={cn(
-                          isActive
-                            ? 'font-bold dark:text-white text-black '
-                            : 'font-medium',
-                          'relative hover:bg-gray-200  transition-all p-2 rounded-md  text-gray-700 dark:hover:text-black dark:text-gray-100 '
-                        )}
-                      >
-                        <p className={cn()}>{data.label}</p>
-                        <div
+                  {hasUser &&
+                    linkItems.map((data, index) => {
+                      const isActive = pathname === data.href.toLowerCase();
+                      return (
+                        <Link
+                          key={index}
+                          href={data.href}
                           className={cn(
-                            isActive &&
-                              'border-b-1 dark:border-white border-black absolute top-[52px] left-1/2 -translate-1/2 bottom-0  w-[120%] z-10'
+                            isActive
+                              ? 'font-bold dark:text-white text-black '
+                              : 'font-medium',
+                            'relative hover:bg-gray-200  transition-all p-2 rounded-md  text-gray-700 dark:hover:text-black dark:text-gray-100 '
                           )}
-                        ></div>
-                      </Link>
-                    );
-                  })}
+                        >
+                          <p className={cn()}>{data.label}</p>
+                          <div
+                            className={cn(
+                              isActive &&
+                                'border-b-1 dark:border-white border-black absolute top-[52px] left-1/2 -translate-1/2 bottom-0  w-[120%] z-10'
+                            )}
+                          ></div>
+                        </Link>
+                      );
+                    })}
                 </div>
               ) : (
                 <div className='w-full'></div>
@@ -70,9 +77,11 @@ export function Navbar() {
 
               <div className='flex items-center gap-4'>
                 <ThemeToggle />
-                <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
-                  <UserButton />
-                </div>
+                {hasUser && (
+                  <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
+                    <UserButton />
+                  </div>
+                )}
               </div>
             </div>
           </nav>
@@ -93,10 +102,12 @@ export function Navbar() {
                   asChild
                   className='cursor-pointer w-5 h-5 flex justify-end items-center '
                 >
-                  <Menu
-                    onClick={() => setIsOpenedMenu(!isOpenedMenu)}
-                    className='w-5 h-5 '
-                  />
+                  {hasUser && (
+                    <Menu
+                      onClick={() => setIsOpenedMenu(!isOpenedMenu)}
+                      className='w-5 h-5 '
+                    />
+                  )}
                 </SheetTrigger>
                 <SheetContent className='py-6 px-4' side='left'>
                   <DialogTitle>Menu</DialogTitle>
@@ -135,9 +146,13 @@ export function Navbar() {
               </Sheet>
             </div>
             <Logo />
-            <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
-              <UserButton />
-            </div>
+            {hasUser ? (
+              <div className='flex w-8 h-8 justify-center items-center dark:bg-gray-300 bg-gray-700 rounded-full'>
+                <UserButton />
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </nav>
       </div>

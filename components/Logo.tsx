@@ -9,7 +9,7 @@ export function Logo() {
         <div className='flex items-center gap-1'>
           <Wallet className='w-6 h-6 stroke stroke-amber-500' />
           <p className='text-2xl font-bold bg-gradient-to-r from-amber-500 to-green-600 bg-clip-text text-transparent'>
-            Spend&Keep
+            Spend||Keep
           </p>
         </div>
       </Link>

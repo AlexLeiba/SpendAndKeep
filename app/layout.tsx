@@ -5,6 +5,8 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 import QueryProvider from '@/components/providers/QueryProvider';
 import { Toaster } from 'sonner';
+import { Navbar } from '@/components/Navbar';
+import { NavbarLanding } from '@/components/NavbarLanding';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,11 +31,12 @@ export default function RootLayout({
 }>) {
   return (
     <QueryProvider>
-      <ClerkProvider>
+      <ClerkProvider afterSignOutUrl={'/sign-in'}>
         <html lang='en' className=''>
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-background dark:text-white`}
           >
+            <NavbarLanding />
             {children}
           </body>
         </html>
