@@ -79,11 +79,7 @@ export function HistorySection({
         <CardContent className=' lg:w-full md:w-full w-[200vw] overflow-x-auto'>
           <SkeletonWrapper isLoading={isPendingHistoryData}>
             {historyData && historyData.length > 0 ? (
-              <ResponsiveContainer
-                className={'w-full'}
-                // width='100%'
-                height={300}
-              >
+              <ResponsiveContainer className={'w-full'} height={300}>
                 {/* CHART */}
                 <BarChart height={300} data={historyData} barCategoryGap={2}>
                   <CartesianGrid

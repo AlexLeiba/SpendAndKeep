@@ -24,7 +24,7 @@ import { SkeletonWrapper } from '@/components/Skeletons/SkeletonWrapper';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DeleteTransactions } from '@/app/server-actions/transactions-actions';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -47,6 +47,7 @@ export type TransactionHistoryRow = TransactionHistoryType[0]; //transformed typ
 
 export function TableComponent({ data, setPage, page }: Props) {
   const queryClient = useQueryClient();
+
   const {
     isPending: isPendingDeleteTransaction,
     mutate: handleDeleteTransactionMutation,

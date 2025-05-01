@@ -110,7 +110,7 @@ export function TransactionsBalance({
   return (
     <>
       <div className='grid gap-4'>
-        <div className='grid grid-cols-3  gap-2 '>
+        <div className='grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1  gap-2  '>
           {overviewStatsData.map((item, index) => {
             //3 STATS CARDS
             return (

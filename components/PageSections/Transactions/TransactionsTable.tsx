@@ -1,10 +1,10 @@
 'use client';
+import React from 'react';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Spacer } from '@/components/ui/spacer';
 import { MAX_DATE_RANGE_DAYS } from '@/lib/consts';
 import { useQuery } from '@tanstack/react-query';
 import { differenceInDays, startOfMonth } from 'date-fns';
-import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { TableComponent } from './TableComponent';

@@ -11,7 +11,6 @@ import { CurrencyComboBox } from '../../Dashboard/HelloTopSection/CurrencyComboB
 export function Currency() {
   return (
     <div>
-      {' '}
       <Card className='w-full text-left rounded-md'>
         <CardHeader>
           <CardTitle className='text-2xl'>Currency</CardTitle>

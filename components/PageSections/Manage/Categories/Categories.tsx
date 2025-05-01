@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React from 'react';
 import { CreateCategoryDialog } from '../../Dashboard/HelloTopSection/CreateCategoryDialog';
-import { Space, TrendingDown, TrendingUp } from 'lucide-react';
+import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Spacer } from '@/components/ui/spacer';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SkeletonWrapper } from '@/components/Skeletons/SkeletonWrapper';
