@@ -162,9 +162,9 @@ export function CreateCategoryDialog({
               render={({ field }) => {
                 return (
                   <FormItem>
+                    {/* ADD ICON DROPDOWN */}
                     <FormLabel>Icon</FormLabel>
 
-                    {/* CREATE NEW CATEGORY DIALOG (MODAL) */}
                     <Popover>
                       {/* TRIGGER */}
                       <PopoverTrigger asChild className='h-[100px]'>

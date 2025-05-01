@@ -72,5 +72,5 @@ model YearHistory {
   income Float
   expense Float
 
-  @@id([userId,month, year]) 
+  @@id([userId,month, year]) //filtered by month and year
 }

@@ -59,8 +59,8 @@ export async function createTransaction(
     parsedBody.data;
 
   await prismaDB.$transaction([
+    //create transaction
     prismaDB.transaction.create({
-      //create transaction if doesnt exist yet
       data: {
         userId: user.id,
         description: description ?? '',
@@ -72,12 +72,13 @@ export async function createTransaction(
       },
     }),
 
-    //Create or update one Prisma model (upsert)
+    //Create or update one Prisma model with (upsert) on (userId_day_month_year)
     prismaDB.monthHistory.upsert({
+      // If The date has the same (day,month and yeat)  it will be the same ID -> so it only will be UPDATED / otherwise it will be CREATED
       where: {
         //in Prisma schema (userId_day_month_year) this is the structure which creates the ID in this format
+        //the id WAS CREATED WITH @@id(userId,day,month,year) in prisma schema
         userId_day_month_year: {
-          // If The date has the same (day,month and yeat)  it will be the same ID -> so it only will be UPDATED / otherwise it will be CREATED
           userId: user.id,
           month: date?.getMonth() || currentMonth,
           day: date?.getDate() || currentDay,
