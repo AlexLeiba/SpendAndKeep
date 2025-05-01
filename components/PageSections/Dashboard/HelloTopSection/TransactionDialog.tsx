@@ -166,7 +166,7 @@ export function TransactionDialog({ transactionType, triggerChildren }: Props) {
               }}
             />
             <Spacer size={6} />
-            <div className='flex justify-between gap-4'>
+            <div className='flex justify-between gap-4 lg:flex-row md:flex-row flex-col'>
               {/* CATEGORY */}
               <FormField ////FormField === Controller
                 control={formMethods.control}

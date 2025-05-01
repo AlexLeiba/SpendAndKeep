@@ -42,6 +42,7 @@ export async function createTransaction(
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
   const currentDay = currentDate.getDate();
+
   const parsedBody = CreateTransactionSchema.safeParse(transactionData);
 
   if (!parsedBody.success) {
@@ -59,7 +60,7 @@ export async function createTransaction(
 
   await prismaDB.$transaction([
     prismaDB.transaction.create({
-      //create transaction
+      //create transaction if doesnt exist yet
       data: {
         userId: user.id,
         description: description ?? '',
@@ -71,8 +72,8 @@ export async function createTransaction(
       },
     }),
 
+    //Create or update one Prisma model (upsert)
     prismaDB.monthHistory.upsert({
-      //Create or update one Prisma model (upsert)
       where: {
         //in Prisma schema (userId_day_month_year) this is the structure which creates the ID in this format
         userId_day_month_year: {
@@ -83,6 +84,7 @@ export async function createTransaction(
           year: date?.getFullYear() || currentYear,
         },
       },
+      //If already exist only update expense and income amounts/ else create new
       create: {
         userId: user.id,
         month: date?.getMonth() || currentMonth,
@@ -91,13 +93,13 @@ export async function createTransaction(
         expense: type === 'expense' ? amount : 0,
         income: type === 'income' ? amount : 0,
       },
+      //if Already exists with this ID then Update   (expense value or Income)
       update: {
-        //if Already exists with this ID then Update  (expense value or Income)
         expense: {
-          increment: type === 'expense' ? amount : 0,
+          increment: type === 'expense' ? amount : 0, //WILL increment prev value by the current amount
         },
         income: {
-          increment: type === 'income' ? amount : 0,
+          increment: type === 'income' ? amount : 0, //WILL increment prev value by the current amount
         },
       },
     }),

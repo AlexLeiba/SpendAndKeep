@@ -42,7 +42,7 @@ export function OverviewSection({
 
   return (
     <div>
-      <div className='flex justify-between items-center'>
+      <div className='flex justify-between lg:items-center md:items-center lg:flex-row md:flex-row flex-col gap-4'>
         <h2 className='text-3xl font-bold'>Overview</h2>
 
         <DateRangePicker

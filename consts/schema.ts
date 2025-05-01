@@ -1,6 +1,4 @@
-import { MAX_DATE_RANGE_DAYS } from '@/lib/consts';
 import { Currencies } from '@/lib/currencies';
-import { differenceInDays } from 'date-fns';
 import { z } from 'zod';
 
 export const UserSettingsSchema = z.object({

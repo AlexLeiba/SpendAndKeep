@@ -37,7 +37,8 @@ export type GetCategoriesStatsType = Awaited<
 
 async function getCategoriesStats(userId: string, from: Date, to: Date) {
   const stats = await prismaDB.transaction.groupBy({
-    by: ['type', 'category', 'categoryIcon'], //group by (type, category, categoryIcon) presented in (prisma.schema) under the model (transaction)
+    by: ['type', 'category', 'categoryIcon'], //group by (type, category, categoryIcon) presented in (prisma.schema) under the model (transaction) Will concatenate the amoun sum if all fields matches
+    // where is used as a filer
     where: {
       userId: userId, //filter by userId
       date: {
@@ -45,9 +46,11 @@ async function getCategoriesStats(userId: string, from: Date, to: Date) {
         lte: to, //less than or equal to
       },
     },
+    // will sum all the values of the amount field ( if its the same date with the same category and type ) the amount will simplty be added with prev one
     _sum: {
       amount: true,
     },
+    // will order by the sum of the amount field
     orderBy: {
       _sum: {
         amount: 'desc',

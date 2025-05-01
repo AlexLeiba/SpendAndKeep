@@ -217,7 +217,7 @@ export function TransactionsBalance({
                       );
                     })
                 ) : (
-                  <p className='text-sm text-gray-300'>
+                  <p className='text-sm dark:text-gray-300'>
                     No income found for this period.
                   </p>
                 )}
@@ -286,7 +286,7 @@ export function TransactionsBalance({
                       );
                     })
                 ) : (
-                  <p className='text-sm text-gray-300'>
+                  <p className='text-sm dark:text-gray-300'>
                     No expense found for this period.
                   </p>
                 )}

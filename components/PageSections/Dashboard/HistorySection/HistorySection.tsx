@@ -27,6 +27,7 @@ export function HistorySection({
   userSettings: UserSettings;
 }) {
   const [timeframe, setTimeframe] = React.useState<TimeframeType>('month');
+
   const [period, setPeriod] = React.useState<PeriodType>({
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
@@ -52,8 +53,8 @@ export function HistorySection({
       <h2 className='text-3xl font-bold'>History</h2>
       <Spacer size={6} />
 
-      <Card className='rounded-md '>
-        <CardHeader className='flex justify-between items-center'>
+      <Card className='rounded-md w-full overflow-x-auto'>
+        <CardHeader className='flex justify-between lg:items-center md:items-center lg:flex-row md:flex-row flex-col gap-4'>
           <div>
             <HistoryPeriodSelector
               period={period}
@@ -75,10 +76,15 @@ export function HistorySection({
             </div>
           </div>
         </CardHeader>
-        <CardContent className=' w-full'>
+        <CardContent className=' lg:w-full md:w-full w-[200vw] overflow-x-auto'>
           <SkeletonWrapper isLoading={isPendingHistoryData}>
             {historyData && historyData.length > 0 ? (
-              <ResponsiveContainer width='100%' height={300}>
+              <ResponsiveContainer
+                className={'w-full'}
+                // width='100%'
+                height={300}
+              >
+                {/* CHART */}
                 <BarChart height={300} data={historyData} barCategoryGap={2}>
                   <CartesianGrid
                     strokeDasharray={'5 5'}
@@ -118,16 +124,14 @@ export function HistorySection({
                   <Bar
                     label='Expense'
                     radius={4}
-                    dataKey='expense'
+                    dataKey='expense' //the key from data
                     fill='#a92e3c'
-                    activeBar={<Rectangle fill='pink' stroke='blue' />}
                   />
                   <Bar
                     label='Income'
                     radius={4}
-                    dataKey='income'
+                    dataKey='income' //the key from data
                     fill='#52bc7a'
-                    activeBar={<Rectangle fill='gold' stroke='purple' />}
                   />
                 </BarChart>
               </ResponsiveContainer>
