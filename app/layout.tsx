@@ -19,9 +19,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Spend&Keep',
+  title: 'Spend||Keep',
   description:
-    'Spend and keep is a budget tracker app that helps you track your expenses and stay within your budget.',
+    'Spend or keep is a budget tracker app that helps you track your expenses and stay on top of your budget.',
+
+  // Open Graph
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://spend-or-keep.vercel.app/',
+    title: 'Spend||Keep',
+    description:
+      'Spend or keep is a budget tracker web app that helps you track your expenses and stay on top of your budget.',
+    images: [
+      {
+        url: 'https://res.cloudinary.com/deixj28ym/image/upload/v1754381004/travel-plan/m8w8ykg507evpnasawte.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Spend||Keep',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
