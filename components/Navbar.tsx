@@ -89,7 +89,7 @@ export function Navbar() {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="block    md:hidden  fixed top-0 left-0 right-0  dark:bg-gray-950 bg-gray-300">
+      <div className="block z-50   md:hidden  fixed top-0 left-0 right-0  dark:bg-gray-950 bg-gray-300">
         <nav className="flex  px-6 h-[60px] min-h-[60px] items-center justify-between w-full">
           <div className="flex justify-between items-center w-full">
             {/* links */}
